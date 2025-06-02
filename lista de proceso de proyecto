@@ -1,0 +1,5 @@
+1.Selecionar para que uso va hacer el codigo de registro de asistencia como (fabrica,hospital,restaurante,etc) en este caso yo eligire hacerlo para una fabrica de productos textiles (ropa)
+2.Hacer una lista de todos los datos que se nesecita para hacer un registro de asisitencia como (hora,fecha,nombre,ocupacion,hora de salida,etc)
+3.Emepzar haciendo el menu de inicio en tkinter talvez con una bienvenida y el nombre de la empresa
+4.Seguir mejorando la ventana con opciones personalizables y opciones cerradas para llevar un mejor control de asisitecia
+5.
