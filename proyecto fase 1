@@ -13,7 +13,7 @@ def registrar_asistencia():
     entrada_apellido.pack()
     tk.Label(ventana_datos, text="Género:").pack(pady=5)
     genero_var = tk.StringVar(ventana_datos)
-    genero_var.set("Seleccionar")  # Valor por defecto
+    genero_var.set("Seleccionar")  
     opciones_genero = ["Masculino", "Femenino"]
     menu_genero = tk.OptionMenu(ventana_datos, genero_var, *opciones_genero)
     menu_genero.pack()
