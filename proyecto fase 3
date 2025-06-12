@@ -1,0 +1,136 @@
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+
+registros = []
+
+def registrar_asistencia():
+    ventana_datos = tk.Toplevel(ventana)
+    ventana_datos.title("Datos de Asistencia")
+    ventana_datos.geometry("400x300")
+
+    tk.Label(ventana_datos, text="Nombre:").pack(pady=5)
+    entrada_nombre = tk.Entry(ventana_datos, width=30)
+    entrada_nombre.pack()
+
+    tk.Label(ventana_datos, text="Apellido:").pack(pady=5)
+    entrada_apellido = tk.Entry(ventana_datos, width=30)
+    entrada_apellido.pack()
+
+    tk.Label(ventana_datos, text="Género:").pack(pady=5)
+    genero_var = tk.StringVar(ventana_datos)
+    genero_var.set("Seleccionar")
+    opciones_genero = ["Masculino", "Femenino"]
+    menu_genero = tk.OptionMenu(ventana_datos, genero_var, *opciones_genero)
+    menu_genero.pack()
+
+    def abrir_ventana_horario_y_puesto(nombre, apellido, genero):
+        ventana_horario = tk.Toplevel(ventana_datos)
+        ventana_horario.title("Horario y Puesto de Trabajo")
+        ventana_horario.geometry("400x300")
+
+        tk.Label(ventana_horario, text="Horario de entrada (HH:MM):").pack(pady=5)
+        entrada_hora_inicio = tk.Entry(ventana_horario)
+        entrada_hora_inicio.pack()
+
+        tk.Label(ventana_horario, text="Horario de salida (HH:MM):").pack(pady=5)
+        entrada_hora_fin = tk.Entry(ventana_horario)
+        entrada_hora_fin.pack()
+
+        tk.Label(ventana_horario, text="Puesto de trabajo:").pack(pady=5)
+        puesto_var = tk.StringVar(ventana_horario)
+        puesto_var.set("Seleccionar")
+        opciones_puesto = [
+            "Producción", "Corte", "Costura", "Terminación",
+            "Almacén", "Control de calidad", "Diseño", "Ventas", "Administración"
+        ]
+        menu_puesto = tk.OptionMenu(ventana_horario, puesto_var, *opciones_puesto)
+        menu_puesto.pack()
+
+        def confirmar_horario_y_puesto():
+            hora_inicio = entrada_hora_inicio.get().strip()
+            hora_fin = entrada_hora_fin.get().strip()
+            puesto = puesto_var.get()
+
+            if hora_inicio and hora_fin and puesto in opciones_puesto:
+               
+                registros.append({
+                    "Nombre": nombre,
+                    "Apellido": apellido,
+                    "Género": genero,
+                    "Hora Entrada": hora_inicio,
+                    "Hora Salida": hora_fin,
+                    "Puesto": puesto
+                })
+
+                ventana_datos.destroy()
+                mostrar_tabla_registros()
+            else:
+                messagebox.showwarning("Faltan datos", "Por favor complete todas las opciones")
+
+        tk.Button(ventana_horario, text="Confirmar", command=confirmar_horario_y_puesto).pack(pady=20)
+
+    def confirmar():
+        nombre = entrada_nombre.get().strip()
+        apellido = entrada_apellido.get().strip()
+        genero = genero_var.get()
+
+        if nombre and apellido and genero in opciones_genero:
+            abrir_ventana_horario_y_puesto(nombre, apellido, genero)
+        else:
+            messagebox.showwarning("Faltan datos", "Por favor complete todas las opciones")
+
+    tk.Button(ventana_datos, text="Siguiente", command=confirmar).pack(pady=20)
+
+
+def mostrar_tabla_registros():
+    ventana_tabla = tk.Toplevel(ventana)
+    ventana_tabla.title("Registros de Asistencia")
+    ventana_tabla.geometry("700x300")
+
+    columnas = ("Nombre", "Apellido", "Género", "Hora Entrada", "Hora Salida", "Puesto")
+    tree = ttk.Treeview(ventana_tabla, columns=columnas, show='headings')
+
+    for col in columnas:
+        tree.heading(col, text=col)
+        tree.column(col, width=100)
+
+   
+    for registro in registros:
+        tree.insert('', tk.END, values=(
+            registro["Nombre"],
+            registro["Apellido"],
+            registro["Género"],
+            registro["Hora Entrada"],
+            registro["Hora Salida"],
+            registro["Puesto"]
+        ))
+
+    tree.pack(expand=True, fill=tk.BOTH)
+
+
+ventana = tk.Tk()
+ventana.title("Registro de Asistencia")
+ventana.geometry("700x300")
+ventana.configure(bg="#f0f0f0")
+
+etiqueta = tk.Label(
+    ventana,
+    text="Bienvenido a la empresa SILTON fabrica de ropa",
+    font=("Arial", 20),
+    bg="#f0f0f0"
+)
+etiqueta.pack(pady=40)
+
+boton = tk.Button(
+    ventana,
+    text="Registrar asistencia",
+    font=("Arial", 14),
+    width=25,
+    height=2,
+    fg="black",
+    command=registrar_asistencia
+)
+boton.pack(pady=20)
+
+ventana.mainloop()
